@@ -1,0 +1,27 @@
+{
+  "name": "node-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+		"start": "nodemon ./src/index.js",
+		"update": "git pull & npm install & tsc"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.16.2",
+    "robotjs": "0.4.7",
+    "socket.io": "2.0.4"
+  },
+  "devDependencies": {
+    "@types/express": "4.11.1",
+    "@types/socket.io": "1.4.31",
+    "typescript": "^2.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smithgeek/nodebot.git"
+  }
+}
