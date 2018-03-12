@@ -20,6 +20,20 @@ catch {
 
 app.use(express.static("./src/views"));
 
+
+function standardExec(cmd: string, res: express.Response){
+	exec(cmd, (error, stdout, stderr) => {
+		if(error){
+			res.json({error, stdout, stderr}).status(500);
+			res.send();
+		}
+		else{
+			res.json({error, stderr, stdout}).status(200);
+			res.send();
+		}
+	});
+}
+
 const mouseButtons = ["", "left", "middle", "right"];
 const ignoreKeys = ["Shift", "Alt", "Control"];
 const removePrefixes = ["Arrow"];
@@ -110,44 +124,28 @@ app.get('/api/DisconnectAll', (_req, res) => {
 });
 
 app.get("/api/Update", (_req, res) => {
-	exec("npm run update", (error, stdout, stderr) => {
-		res.status(200).json({error, stdout, stderr}).send();
-	});
+	standardExec("npm run update", res);
 });
 
 app.get("/api/UpdateServer", (_req, res) => {
-	exec("~/update.sh", (error, stdout, stderr) => {
-		if(error){
-			res.json({error, stdout, stderr}).status(500);
-			res.send();
-		}
-		else{
-			res.json({error, stderr, stdout}).status(200);
-			res.send();
-		}
-	});
+	standardExec("~/update.sh", res);
 });
 
 app.get("/api/RebootServer", (_req, res) => {
-	exec("sudo reboot", (error, stdout, stderr) => {
-		if(error){
-			res.json({error, stdout, stderr}).status(500);
-			res.send();
-		}
-		else{
-			res.json({error, stderr, stdout}).status(200);
-			res.send();
-		}
-	});
+	standardExec("sudo reboot", res);
 });
 
 app.get("/api/Restart", () => {
 	process.exit(1);
-})
+});
 
-app.get("/api/Stop", () => {
-	exec("pm2 stop nodebot");
-})
+app.get("/api/Stop", (_req, res) => {
+	standardExec("pm2 stop nodebot", res);
+});
+
+app.get("/api/Poweroff", (_req, res) => {
+    standardExec("sudo poweroff", res);
+});
 
 const port = config.port || 3000;
 http.listen(port, () => {

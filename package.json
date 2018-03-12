@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-		"start": "nodemon ./src/index.js",
-		"update": "git pull && npm install && tsc"
+    "start": "nodemon ./src/index.js",
+    "update": "git pull && npm install && tsc"
   },
   "author": "",
   "license": "MIT",
