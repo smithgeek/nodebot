@@ -63,3 +63,4 @@ typings/
 src/index.js
 src/index.d.ts
 src/index.js.map
+config.js

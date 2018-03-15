@@ -9,7 +9,7 @@ const app = express();
 const http = new Server(app);
 const io = socketIo(http);
 
-let config: {port?: string};
+let config: {port?: string, startupCommand?: string};
 try {
 	config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 }
@@ -146,6 +146,10 @@ app.get("/api/Stop", (_req, res) => {
 app.get("/api/Poweroff", (_req, res) => {
     standardExec("sudo poweroff", res);
 });
+
+if(config.startupCommand){
+    exec(config.startupCommand);
+}
 
 const port = config.port || 3000;
 http.listen(port, () => {
