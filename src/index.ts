@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as robot from 'robotjs';
 import * as socketIo from 'socket.io';
 import {exec} from 'child_process';
+var CronJob = require('cron').CronJob;
 
 const app = express();
 const http = new Server(app);
@@ -147,9 +148,25 @@ app.get("/api/Poweroff", (_req, res) => {
     standardExec("sudo poweroff", res);
 });
 
+app.get("/api/StartupCommand", (_req, res) => {
+	if(config.startupCommand){
+		standardExec(config.startupCommand, res);
+	}
+	else{
+		res.json({message: "No startup command available."}).status(200);
+			res.send();
+		}
+});
+
 if(config.startupCommand){
     exec(config.startupCommand);
 }
+
+// Reboot every night at midnight because tinker can otherwise get flaky
+const job = new CronJob('00 00 00 * * *', function(){
+	exec("sudo reboot");
+});
+job.start();
 
 const port = config.port || 3000;
 http.listen(port, () => {
